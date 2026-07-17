@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B:arte SSAK SSAK — Bản Tóm Tắt Booking</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #D92534;
+    --red-dark: #B01F2C;
+    --pink: #FAD0D4;
+    --pink-light: #FFEFF1;
+    --cream: #FFF9FA;
+    --ink: #2B2B2B;
+    --ink-soft: #6b5a5c;
+    --green: #3C8A5C;
+    --green-bg: #EAF6EE;
+    --red-bg: #FDEBEC;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  html { scroll-behavior: smooth; }
+  
+  body {
+    background: #e7e2e0;
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    padding: 40px 0;
+  }
+  
+  .deck {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+  }
+  
+  .slide {
+    width: 1280px;
+    height: 720px;
+    background: var(--cream);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.18);
+    flex-shrink: 0;
+  }
+  
+  h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
+  
+  .eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--red);
+    text-transform: uppercase;
+  }
+  
+  .logo-row {
+    position: absolute;
+    top: 28px; right: 36px;
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--red);
+    letter-spacing: 1px;
+    z-index: 10;
+  }
+  
+  .logo-row span.tag {
+    background: var(--red);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+  
+  .page-num {
+    position: absolute;
+    bottom: 26px; right: 36px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  /* ============ UI/UX MOTION CLASSES ============ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .delay-1 { transition-delay: 0.1s; }
+  .delay-2 { transition-delay: 0.2s; }
+  .delay-3 { transition-delay: 0.3s; }
+  .delay-4 { transition-delay: 0.4s; }
+
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-18px); }
+    100% { transform: translateY(0px); }
+  }
+
+  /* ============ SLIDE 1 — COVER ============ */
+  .s1 {
+    background: linear-gradient(160deg, var(--red) 0%, var(--red-dark) 55%, #7a1420 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 100px;
+  }
+  .s1::before {
+    content: ""; position: absolute;
+    width: 520px; height: 520px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 70%);
+    top: -160px; right: -140px;
+  }
+  .s1::after {
+    content: ""; position: absolute;
+    width: 380px; height: 380px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.18);
+    bottom: -140px; left: -100px;
+  }
+  .s1 .eyebrow-w {
+    font-family: 'Montserrat', sans-serif; font-size: 13px;
+    letter-spacing: 4px; color: var(--pink);
+    font-weight: 700; margin-bottom: 22px;
+  }
+  .s1 h1 {
+    font-size: 70px; font-weight: 900; line-height: 1.1;
+    letter-spacing: -1px; margin-bottom: 22px;
+  }
+  .s1 h1 span { color: var(--pink); }
+  .s1 .sub {
+    font-size: 18px; font-weight: 500; max-width: 680px;
+    color: rgba(255,255,255,0.92); line-height: 1.6;
+    margin-bottom: 36px;
+  }
+  .tag-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .tag-pill {
+    border: 1.5px solid rgba(255,255,255,0.55);
+    color: #fff; padding: 9px 18px; border-radius: 30px;
+    font-size: 13px; font-weight: 700; font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+  }
+  .tag-pill:hover {
+    background: #fff; color: var(--red);
+    transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    cursor: default;
+  }
+  .s1 .brand-mark { position: absolute; right: 100px; bottom: 80px; text-align: right; }
+  .s1 .brand-mark .bname {
+    font-family: 'Montserrat', sans-serif; font-weight: 900;
+    font-size: 26px; letter-spacing: 2px;
+  }
+  .s1 .brand-mark .bline { font-size: 13px; color: var(--pink); font-weight: 600; margin-top: 4px; }
+
+  /* ============ SLIDE 2 — Brand Positioning ============ */
+  .s2 { padding: 64px 90px; }
+  .head-block { margin-bottom: 36px; }
+  .head-block h2 { font-size: 36px; font-weight: 800; color: var(--ink); margin-top: 10px; }
+  .head-block .accent { color: var(--red); }
+  .head-underline { width: 70px; height: 5px; background: var(--red); border-radius: 3px; margin-top: 14px; }
+  .quote-strip {
+    font-family: 'Inter', sans-serif; font-style: italic; font-size: 16px;
+    color: var(--ink-soft); margin-top: 18px; font-weight: 500;
+  }
+  .grid3 { display: flex; gap: 26px; margin-top: 40px; }
+  .pcard {
+    flex: 1; background: #fff; border-radius: 18px; padding: 32px 26px;
+    box-shadow: 0 10px 26px rgba(217,37,52,0.08); border-top: 5px solid var(--red);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .pcard:hover {
+    transform: translateY(-10px); box-shadow: 0 20px 40px rgba(217,37,52,0.15);
+  }
+  .pcard .num {
+    font-family: 'Montserrat', sans-serif; font-size: 34px; font-weight: 900;
+    color: var(--pink); -webkit-text-stroke: 1.5px var(--red); margin-bottom: 14px;
+  }
+  .pcard h3 { font-size: 19px; color: var(--red-dark); margin-bottom: 12px; font-weight: 800; }
+  .pcard p { font-size: 14.5px; line-height: 1.6; color: var(--ink-soft); }
+
+  /* ============ SLIDE 3 — Target Audience ============ */
+  .s3 { padding: 64px 90px; }
+  .two-col { display: flex; gap: 30px; margin-top: 34px; height: 490px; }
+  .col-box { flex: 1; border-radius: 20px; padding: 34px 30px; transition: transform 0.3s ease; }
+  .col-box:hover { transform: scale(1.02); }
+  .pain-box { background: var(--red-bg); border: 1.5px solid #f3c2c6; }
+  .sol-box { background: var(--green-bg); border: 1.5px solid #bfe3cc; }
+  .col-box h3 { font-size: 20px; margin-bottom: 20px; font-weight: 800; }
+  .pain-box h3 { color: var(--red-dark); }
+  .sol-box h3 { color: var(--green); }
+  .pain-item { display: flex; gap: 12px; margin-bottom: 18px; align-items: flex-start; }
+  .pain-item .ic {
+    width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%;
+    background: var(--red); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800;
+  }
+  .pain-item p { font-size: 14.5px; line-height: 1.55; color: var(--ink); font-weight: 500;}
+  .demo-strip {
+    background: #fff; border-radius: 14px; padding: 18px 22px;
+    margin-bottom: 22px; font-size: 14.5px; color: var(--ink-soft);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05); font-weight: 500;
+  }
+  .demo-strip b { color: var(--red); font-weight: 700; }
+  .sol-box .sol-text { font-size: 15px; line-height: 1.7; color: #2b4a37; font-weight: 600; }
+  .sol-box .badge {
+    display: inline-block; background: var(--green); color: #fff;
+    font-size: 12px; font-weight: 700; padding: 5px 14px;
+    border-radius: 20px; margin-top: 20px; font-family: 'Montserrat', sans-serif;
+  }
+
+  /* ============ SLIDE 4 & 5 — Product Deep Dive (Updated with Images) ============ */
+  .split { display: flex; height: calc(100% - 0px); }
+  .split-visual {
+    width: 40%; display: flex; align-items: center; justify-content: center;
+    position: relative; flex-direction: column;
+  }
+  .split-visual.jam { background: linear-gradient(160deg, #c81f2d 0%, var(--red) 55%, #e8535f 100%); }
+  .split-visual.yog { background: linear-gradient(160deg, #fceef0 0%, var(--pink) 60%, #f7b9c1 100%); }
+  
+  /* Cấu trúc Motion mới cho hình ảnh sản phẩm */
+  .float-wrapper {
+    animation: float 5s ease-in-out infinite; /* Hiệu ứng lơ lửng */
+  }
+  .jam .float-wrapper { animation-delay: 0s; }
+  .yog .float-wrapper { animation-delay: 1s; /* Lệch nhịp để tự nhiên hơn */ }
+
+  .product-img {
+    width: 320px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.25)); /* Đổ bóng theo viền sản phẩm */
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+  }
+  
+  /* Hiệu ứng 3D khi rê chuột */
+  .product-img:hover {
+    transform: scale(1.12) rotate(4deg);
+  }
+
+  .split-visual .caption {
+    margin-top: 26px; font-family: 'Montserrat', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .jam .caption { color: #ffe1e3; }
+  .yog .caption { color: var(--red-dark); }
+  
+  .split-content { width: 60%; padding: 56px 60px; display: flex; flex-direction: column; }
+  .split-content .eyebrow { margin-bottom: 8px; }
+  .split-content h2 { font-size: 28px; font-weight: 800; color: var(--ink); line-height: 1.3; margin-bottom: 18px; }
+  
+  .spec-row { display: flex; gap: 14px; margin-bottom: 26px; }
+  .spec-chip {
+    background: var(--pink-light); border: 1px solid var(--pink); border-radius: 12px;
+    padding: 10px 16px; font-size: 13px; color: var(--red-dark);
+    font-weight: 700; flex: 1; transition: all 0.3s ease;
+  }
+  .spec-chip:hover {
+    transform: translateY(-3px); box-shadow: 0 5px 15px rgba(217,37,52,0.15);
+  }
+  .spec-chip span {
+    display: block; font-size: 10.5px; color: var(--ink-soft); font-weight: 700;
+    margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.5px;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .benefit-list { display: flex; flex-direction: column; gap: 16px; }
+  .benefit-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: #fff; border-radius: 14px; padding: 16px 18px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05); transition: transform 0.3s ease;
+  }
+  .benefit-item:hover { transform: translateX(5px); }
+  .benefit-item .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--red); margin-top: 7px; flex-shrink: 0;
+  }
+  .benefit-item p { font-size: 14px; line-height: 1.55; color: var(--ink); font-weight: 500;}
+  .benefit-item b { color: var(--red-dark); font-weight: 700;}
+
+  /* ============ SLIDE 6 — Usage Steps ============ */
+  .s6 { padding: 64px 90px; }
+  .steps-row { display: flex; gap: 30px; margin-top: 44px; }
+  .step-card {
+    flex: 1; background: #fff; border-radius: 22px; padding: 0;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.08); overflow: hidden;
+    display: flex; flex-direction: column; transition: all 0.4s ease;
+  }
+  .step-card:hover { transform: translateY(-8px); box-shadow: 0 20px 35px rgba(217,37,52,0.15); }
+  .step-head {
+    background: var(--red); color: #fff; padding: 22px 28px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .step-head .circle {
+    width: 44px; height: 44px; border-radius: 50%; background: #fff;
+    color: var(--red); font-weight: 900; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .step-head h3 { font-size: 18px; font-weight: 700; }
+  .step-body { padding: 28px 28px 32px; flex: 1; }
+  .step-body p { font-size: 15px; line-height: 1.7; color: var(--ink-soft); font-weight: 500;}
+  .step-body .mini-tag {
+    display: inline-block; margin-top: 18px; background: var(--pink-light);
+    color: var(--red-dark); font-size: 12px; font-weight: 700;
+    padding: 6px 14px; border-radius: 20px; font-family: 'Montserrat', sans-serif;
+  }
+  .arrow-between {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; color: var(--pink); font-weight: 800;
+  }
+
+  /* ============ SLIDE 7 — Content Guide ============ */
+  .s7 { padding: 64px 90px; }
+  .msg-banner {
+    background: linear-gradient(100deg, var(--red) 0%, var(--red-dark) 100%);
+    color: #fff; border-radius: 16px; padding: 22px 30px; margin-top: 26px;
+    font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 15px;
+    letter-spacing: 0.3px; transition: transform 0.3s ease; line-height: 1.5;
+  }
+  .msg-banner:hover { transform: scale(1.02); }
+  .angle-grid { display: flex; gap: 22px; margin-top: 26px; }
+  .angle-card {
+    flex: 1; background: #fff; border-radius: 16px; padding: 24px 22px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06); border-left: 5px solid var(--pink);
+    transition: all 0.3s ease;
+  }
+  .angle-card:hover { transform: translateY(-5px); border-left: 5px solid var(--red); box-shadow: 0 12px 25px rgba(217,37,52,0.1); }
+  .angle-card .icon-num {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px;
+    color: var(--red); letter-spacing: 1px; margin-bottom: 10px;
+  }
+  .angle-card h4 { font-size: 16px; margin-bottom: 10px; color: var(--ink); font-weight: 800; }
+  .angle-card p { font-size: 14px; line-height: 1.6; color: var(--ink-soft); font-weight: 500;}
+  
+  .hashtag-footer {
+    margin-top: 30px; background: var(--pink-light); border-radius: 16px;
+    padding: 20px 28px; display: flex; align-items: center; gap: 18px;
+  }
+  .hashtag-footer .lbl {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px;
+    color: var(--red-dark); letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .htag {
+    background: #fff; color: var(--red); font-weight: 700; font-size: 13.5px;
+    padding: 7px 16px; border-radius: 20px; font-family: 'Montserrat', sans-serif;
+    border: 1px solid var(--pink); transition: all 0.3s ease;
+  }
+  .htag:hover { background: var(--red); color: #fff; border-color: var(--red); transform: scale(1.05); }
+
+  /* ============ SLIDE 8 — Do & Don't ============ */
+  .s8 { padding: 64px 90px; }
+  .dd-row { display: flex; gap: 28px; margin-top: 34px; }
+  .dd-col { flex: 1; border-radius: 20px; padding: 30px 28px; }
+  .dd-col.do { background: var(--green-bg); border: 1.5px solid #bfe3cc; }
+  .dd-col.dont { background: var(--red-bg); border: 1.5px solid #f3c2c6; }
+  .dd-title { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+  .dd-title .badge-circle {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 900; font-size: 18px; font-family: 'Montserrat', sans-serif;
+  }
+  .do .badge-circle { background: var(--green); }
+  .dont .badge-circle { background: var(--red); }
+  .dd-title h3 { font-size: 21px; font-weight: 800; }
+  .do h3 { color: var(--green); }
+  .dont h3 { color: var(--red-dark); }
+  .dd-item {
+    background: #fff; border-radius: 12px; padding: 16px 18px; margin-bottom: 14px;
+    font-size: 14px; line-height: 1.55; color: var(--ink); font-weight: 500;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.05); transition: transform 0.3s ease;
+  }
+  .dd-item:hover { transform: scale(1.02); }
+  .dd-item b { color: var(--red-dark); font-weight: 700;}
+  .note-final {
+    margin-top: 22px; text-align: center; font-family: 'Inter', sans-serif;
+    font-size: 13.5px; color: var(--ink-soft); font-style: italic; font-weight: 500;
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <!-- SLIDE 1: COVER -->
+  <div class="slide s1">
+    <div class="eyebrow-w reveal">B:ARTE × KOC BẢN TÓM TẮT BOOKING</div>
+    <h1 class="reveal delay-1">SSAK SSAK<br><span>BẢN TÓM TẮT BOOKING</span></h1>
+    <div class="sub reveal delay-2">Dòng sản phẩm Berry: Sữa Rửa Mặt Dạng Mứt & Mặt Nạ Sữa Chua — mỹ phẩm làm sạch đánh thức giác quan lấy cảm hứng từ thực phẩm, dành riêng cho các nhà sáng tạo mang kết cấu chân thực vào đời sống.</div>
+    <div class="tag-row reveal delay-3">
+      <div class="tag-pill">#CẢM_HỨNG_DÂU_TÂY</div>
+      <div class="tag-pill">#HIỆU_QUẢ_THUẦN_CHAY</div>
+      <div class="tag-pill">#KẾT_CẤU_THỰC_PHẨM</div>
+    </div>
+    <div class="brand-mark reveal delay-3">
+      <div class="bname">B:ARTE</div>
+      <div class="bline">SSAK SSAK · Bộ Sưu Tập Berry</div>
+    </div>
+    <div class="page-num" style="color:rgba(255,255,255,0.7)">01 / 08</div>
+  </div>
+
+  <!-- SLIDE 2: BRAND POSITIONING -->
+  <div class="slide s2">
+    <div class="logo-row"><span class="tag">B:ARTE</span> SSAK SSAK</div>
+    <div class="head-block reveal">
+      <div class="eyebrow">Ý Tưởng & Định Vị Thương Hiệu</div>
+      <h2>Mỹ Phẩm Sạch Đánh Thức Giác Quan,<br><span class="accent">Lấy Cảm Hứng Từ Thực Phẩm</span></h2>
+      <div class="head-underline"></div>
+      <div class="quote-strip">"Một trải nghiệm giác quan kích thích cả thị giác lẫn khứu giác — những kết cấu đẹp mắt không thể chối từ, trông ngon như có thể ăn được."</div>
+    </div>
+    <div class="grid3">
+      <div class="pcard reveal delay-1">
+        <div class="num">01</div>
+        <h3>Cảm Hứng Làm Đẹp Từ Thực Phẩm</h3>
+        <p>Một trải nghiệm trực quan đánh thức thị giác và khứu giác, với kết cấu lấy cảm hứng từ mứt dâu tây thật và sữa chua Hy Lạp, khơi dậy sự tò mò ngay từ cái nhìn đầu tiên.</p>
+      </div>
+      <div class="pcard reveal delay-2">
+        <div class="num">02</div>
+        <h3>Hiệu Quả Thuần Chay</h3>
+        <p>Công thức thuần chay, sạch sẽ, kết hợp sự hấp dẫn về mặt cảm xúc với hiệu quả đã được chứng minh lâm sàng — đảm bảo an toàn và hiệu quả qua các bài kiểm tra chuyên sâu.</p>
+      </div>
+      <div class="pcard reveal delay-3">
+        <div class="num">03</div>
+        <h3>Quy Trình 2 Bước</h3>
+        <p>Một quy trình đơn giản nhưng mạnh mẽ: loại bỏ tạp chất và lớp trang điểm bằng Sữa Rửa Mặt Dạng Mứt, sau đó tinh chỉnh lượng dầu thừa và kết cấu da bằng Mặt Nạ Sữa Chua.</p>
+      </div>
+    </div>
+    <div class="page-num">02 / 08</div>
+  </div>
+
+  <!-- SLIDE 3: TARGET AUDIENCE -->
+  <div class="slide s3">
+    <div class="logo-row"><span class="tag">B:ARTE</span> SSAK SSAK</div>
+    <div class="head-block reveal">
+      <div class="eyebrow">Khách Hàng Mục Tiêu & Nhu Cầu Thị Trường</div>
+      <h2>Mục Tiêu Cốt Lõi & <span class="accent">Nỗi Đau Khách Hàng (Pain Points)</span></h2>
+      <div class="head-underline"></div>
+    </div>
+    <div class="two-col">
+      <div class="col-box pain-box reveal delay-1">
+        <h3>😣 Nỗi Đau Khách Hàng</h3>
+        <div class="pain-item">
+          <div class="ic">1</div>
+          <p>Sữa rửa mặt có tính tẩy rửa mạnh làm mất đi lớp dầu tự nhiên, để lại cảm giác khô căng khó chịu sau mỗi lần rửa.</p>
+        </div>
+        <div class="pain-item">
+          <div class="ic">2</div>
+          <p>Sữa rửa mặt dịu nhẹ lại thường không làm sạch hết lớp tế bào chết tích tụ — một sự đánh đổi đáng thất vọng.</p>
+        </div>
+        <div class="pain-item">
+          <div class="ic">3</div>
+          <p>Mặt nạ giấy phiền phức khi dùng hàng ngày; mặt nạ đất sét để lại cảm giác "căng rát" cực kỳ khó chịu.</p>
+        </div>
+      </div>
+      <div class="col-box sol-box reveal delay-2">
+        <h3>✅ Giải Pháp Từ B:arte</h3>
+        <div class="demo-strip"><b>Khách Hàng Mục Tiêu:</b> Người tiêu dùng Gen Z & MZ (10–29 tuổi) yêu thích trải nghiệm mua sắm theo cảm xúc, đánh thức giác quan và đề cao nội dung có thể chia sẻ (viral).</div>
+        <div class="sol-text">SSAK SSAK mang đến công thức axit yếu <b>pH 5.5</b> giúp chăm sóc da hàng ngày dịu nhẹ, ít kích ứng — loại bỏ nhu cầu làm sạch kép phức tạp mà vẫn cải thiện kết cấu da rõ rệt.</div>
+        <div class="badge">Điểm kích ứng trung bình 0.00 (Đã kiểm nghiệm lâm sàng)</div>
+      </div>
+    </div>
+    <div class="page-num">03 / 08</div>
+  </div>
+
+  <!-- SLIDE 4: PRODUCT 1 - JAM CLEANSER -->
+  <div class="slide">
+    <div class="split">
+      <div class="split-visual jam reveal">
+        <!-- Chèn ảnh sản phẩm 1 với hiệu ứng motion -->
+        <div class="float-wrapper">
+          <img src="https://ecimg.cafe24img.com/pg1220b01605887041/sybazzarnew/web/product/big/20260704/e8293626fce509321746ae1d2b6111ea.png" alt="Jam Cleanser" class="product-img">
+        </div>
+        <div class="caption">Kết cấu dạng mứt · Dâu tây tươi mới hái</div>
+      </div>
+      <div class="split-content reveal delay-1">
+        <div class="eyebrow">Sản Phẩm 01 · Dòng SSAK SSAK Berry</div>
+        <h2>Sữa Rửa Mặt Dạng Mứt<br>B:arte SSAK SSAK Berry</h2>
+        <div class="spec-row">
+          <div class="spec-chip"><span>Dung tích</span>120ml</div>
+          <div class="spec-chip"><span>Kết cấu</span>Mứt → Bọt</div>
+          <div class="spec-chip"><span>Mùi hương</span>Dâu tây tươi</div>
+        </div>
+        <div class="benefit-list">
+          <div class="benefit-item"><div class="dot"></div><p><b>Công Thức Không Chứa Sulfate:</b> Được làm từ các chất hoạt động bề mặt nguồn gốc thực vật và axit amin (Decyl Glucoside, Lauryl Glucoside).</p></div>
+          <div class="benefit-item"><div class="dot"></div><p><b>Tẩy Tế Bào Chết Kép:</b> Kết hợp các hạt vật lý konjac-glucomannan với tác động hóa học dịu nhẹ (PHA, LHA).</p></div>
+          <div class="benefit-item"><div class="dot"></div><p><b>Làm Dịu Da:</b> Được làm giàu với Allantoin, Panthenol, Cam thảo và chiết xuất Mầm bông cải xanh mang lại sự thoải mái mỗi ngày.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">04 / 08</div>
+  </div>
+
+  <!-- SLIDE 5: PRODUCT 2 - YOGURT PACK -->
+  <div class="slide">
+    <div class="split">
+      <div class="split-content reveal delay-1">
+        <div class="eyebrow">Sản Phẩm 02 · Dòng SSAK SSAK Berry</div>
+        <h2>Mặt Nạ Sữa Chua<br>B:arte SSAK SSAK Berry</h2>
+        <div class="spec-row">
+          <div class="spec-chip"><span>Dung tích</span>100g</div>
+          <div class="spec-chip"><span>Kết cấu</span>Sữa chua Hy Lạp đặc</div>
+          <div class="spec-chip"><span>Mùi hương</span>Sữa chua quả mọng</div>
+        </div>
+        <div class="benefit-list">
+          <div class="benefit-item"><div class="dot"></div><p><b>Chăm Sóc Lỗ Chân Lông & Bã Nhờn:</b> Công thức với đất sét trắng Kaolin giúp loại bỏ dầu thừa, giảm bóng nhờn mà không làm mất đi độ ẩm.</p></div>
+          <div class="benefit-item"><div class="dot"></div><p><b>Tăng Cường Hàng Rào Bảo Vệ:</b> Cung cấp sức mạnh từ các thành phần lên men Lactobacillus và Bifida giúp da khỏe mạnh mỗi ngày.</p></div>
+          <div class="benefit-item"><div class="dot"></div><p><b>Đã Được Chứng Minh Lâm Sàng:</b> Chỉ số kích ứng da 0.00 từ Trung tâm Nghiên cứu Lâm sàng Da ProbeM — an toàn tuyệt đối cho da nhạy cảm.</p></div>
+        </div>
+      </div>
+      <div class="split-visual yog reveal delay-2">
+        <!-- Chèn ảnh sản phẩm 2 với hiệu ứng motion -->
+        <div class="float-wrapper">
+          <img src="https://ecimg.cafe24img.com/pg1220b01605887041/sybazzarnew/web/product/big/20260704/14d56cb0191980300a2ce2c272341aae.png" alt="Yogurt Pack" class="product-img">
+        </div>
+        <div class="caption">Kết cấu đậm đặc, dày mịn, ôm sát da</div>
+      </div>
+    </div>
+    <div class="page-num">05 / 08</div>
+  </div>
+
+  <!-- SLIDE 6: USAGE STEPS -->
+  <div class="slide s6">
+    <div class="logo-row"><span class="tag">B:ARTE</span> SSAK SSAK</div>
+    <div class="head-block reveal">
+      <div class="eyebrow">Hướng Dẫn Sử Dụng Từng Bước</div>
+      <h2>Trọn Bộ Quy Trình <span class="accent">2 Bước</span> Đánh Thức Giác Quan</h2>
+      <div class="head-underline"></div>
+    </div>
+    <div class="steps-row">
+      <div class="step-card reveal delay-1">
+        <div class="step-head"><div class="circle">1</div><h3>Làm Sạch & Tẩy Tế Bào Chết</h3></div>
+        <div class="step-body">
+          <p>Thoa Sữa Rửa Mặt Dạng Mứt lên tay ẩm, tạo lớp bọt trắng dày, và nhẹ nhàng massage vùng chữ T theo chuyển động tròn để cuốn trôi tế bào chết. Rửa sạch bằng nước ấm.</p>
+          <span class="mini-tag">Dùng Hàng Ngày · Cả Sáng/Tối</span>
+        </div>
+      </div>
+      <div class="arrow-between reveal delay-2">→</div>
+      <div class="step-card reveal delay-3">
+        <div class="step-head"><div class="circle">2</div><h3>Mặt Nạ Nuôi Dưỡng Chuyên Sâu</h3></div>
+        <div class="step-body">
+          <p>Thoa đều một lớp Mặt Nạ Sữa Chua lên mặt, tránh vùng mắt và môi. Để nguyên trong 10–15 phút để các thành phần lên men thẩm thấu, sau đó rửa sạch bằng nước ấm và thấm khô.</p>
+          <span class="mini-tag">2–3 lần / Tuần · Chăm Sóc Sâu</span>
+        </div>
+      </div>
+    </div>
+    <div class="page-num">06 / 08</div>
+  </div>
+
+  <!-- SLIDE 7: CONTENT GUIDE -->
+  <div class="slide s7">
+    <div class="logo-row"><span class="tag">B:ARTE</span> SSAK SSAK</div>
+    <div class="head-block reveal">
+      <div class="eyebrow">Hướng Dẫn Nội Dung Cho Nhà Sáng Tạo</div>
+      <h2>Kế Hoạch Tạo Nội Dung <span class="accent">Dành Cho KOC/KOL</span></h2>
+      <div class="head-underline"></div>
+    </div>
+    <div class="msg-banner reveal delay-1">💬 Thông Điệp Chính: "Sạch sâu, sảng khoái — dịu nhẹ, thư giãn." Một quy trình làm đẹp thuần chay đánh thức giác quan, mang lại cảm giác thỏa mãn đúng như vẻ ngoài của nó.</div>
+    <div class="angle-grid">
+      <div class="angle-card reveal delay-2">
+        <div class="icon-num">GÓC QUAY 01</div>
+        <h4>Phô Diễn Kết Cấu</h4>
+        <p>Các góc máy quay cận cảnh (macro) ghi lại kết cấu mứt kéo sợi và lớp sữa chua dày mịn thoa lên da — thiết kế để mang lại sự mãn nhãn cho người xem.</p>
+      </div>
+      <div class="angle-card reveal delay-3">
+        <div class="icon-num">GÓC QUAY 02</div>
+        <h4>Làn Da Rạng Rỡ Trước/Sau</h4>
+        <p>Làm nổi bật việc da vẫn giữ được độ ẩm, mềm mại và rạng rỡ rõ rệt ngay sau khi rửa — hoàn toàn không khô ráp, không căng rát.</p>
+      </div>
+      <div class="angle-card reveal delay-4">
+        <div class="icon-num">GÓC QUAY 03</div>
+        <h4>Cảm Hứng "Món Tráng Miệng"</h4>
+        <p>Biến quy trình chăm sóc da thành "thời gian tráng miệng" thư giãn — vui nhộn, lấy cảm hứng từ đồ ăn và cực kỳ dễ viral trên mạng xã hội.</p>
+      </div>
+    </div>
+    <div class="hashtag-footer reveal delay-3">
+      <div class="lbl">Hashtag Bắt Buộc</div>
+      <div class="htag">#Barte</div>
+      <div class="htag">#Ssaksak</div>
+      <div class="htag">#BerryJamCleanser</div>
+      <div class="htag">#BerryYogurtPack</div>
+    </div>
+    <div class="page-num">07 / 08</div>
+  </div>
+
+  <!-- SLIDE 8: DO & DON'T -->
+  <div class="slide s8">
+    <div class="logo-row"><span class="tag">B:ARTE</span> SSAK SSAK</div>
+    <div class="head-block reveal">
+      <div class="eyebrow">Hướng Dẫn Chính Sách</div>
+      <h2>Những Hướng Dẫn Quan Trọng & <span class="accent">Tuân Thủ Nghiêm Ngặt</span></h2>
+      <div class="head-underline"></div>
+    </div>
+    <div class="dd-row">
+      <div class="dd-col do reveal delay-1">
+        <div class="dd-title"><div class="badge-circle">✓</div><h3>NÊN LÀM (DO)</h3></div>
+        <div class="dd-item">Thực hiện rõ bước nhũ hóa <b>"Từ Mứt thành Bọt" (Jam-to-Foam)</b> bằng cách thêm một chút nước khi quay video.</div>
+        <div class="dd-item">Sử dụng ngôn từ hỗ trợ đã được phê duyệt như <b>"hỗ trợ làm giảm bã nhờn"</b> và <b>"làm dịu da nhạy cảm."</b></div>
+        <div class="dd-item">Tự do sáng tạo nội dung theo phong cách cá nhân của bạn, miễn là phù hợp với định hướng chung của thương hiệu.</div>
+      </div>
+      <div class="dd-col dont reveal delay-2">
+        <div class="dd-title"><div class="badge-circle">✕</div><h3>KHÔNG NÊN LÀM (DON'T)</h3></div>
+        <div class="dd-item">Không chà xát mạnh vào vùng da mỏng ngay sát mắt trong quá trình massage hoặc rửa mặt.</div>
+        <div class="dd-item">Tuyệt đối tránh các từ ngữ mang tính cam kết y tế như <b>"trị dứt điểm mụn," "chữa khỏi kích ứng,"</b> hoặc <b>"100% hết sạch lỗ chân lông."</b></div>
+        <div class="dd-item">Không xóa hoặc ẩn video sau khi đã đăng tải mà không thảo luận trước với đội ngũ thương hiệu.</div>
+      </div>
+    </div>
+    <div class="note-final reveal delay-3">Thương hiệu đã cung cấp hướng dẫn từ trước — nội dung thiếu các bước bắt buộc sẽ không được tính là một vòng chỉnh sửa hợp lệ.</div>
+    <div class="page-num">08 / 08</div>
+  </div>
+
+</div>
+
+<!-- Intersection Observer Script For Reveal Animations -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const reveals = document.querySelectorAll(".reveal");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        }
+      });
+    }, { 
+      threshold: 0.15
+    });
+    
+    reveals.forEach(reveal => {
+      observer.observe(reveal);
+    });
+  });
+</script>
+</body>
+</html>
